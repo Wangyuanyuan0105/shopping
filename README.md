@@ -1,2 +1,2 @@
-﻿# shopping
-随手写
+shopping
+Home page of a shopping website
