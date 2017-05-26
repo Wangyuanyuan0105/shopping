@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		.wrap { margin: 0 auto;  width: 400px; height: 100px;border: 1px solid #000;}
+		.box { width: 300px; height: 100px; margin: 0 auto; overflow: hidden; }
+	    .wrap ul { height: 100px; position: relative; left: 0; list-style-type: none; margin: 0; padding: 0;}
+		.wrap ul li{ width: 98px; height: 98px; border: 1px solid #000; float: left; }
+	</style>
+</head>
+<body>
+<div class="wrap">
+<div class="box" id="box">
+	<ul>
+		<li>1</li>
+		<li>2</li>
+		<li>3</li>
+	</ul>
+</div>
+<input type="button" value="prev" name="">
+<input type="button" value="next" name="">
+</div>
+<script type="text/javascript">
+	var box = document.getElementById('box');
+	var oUl = box.getElementsByTagName('ul')[0];
+	oUl.innerHTML +=oUl.innerHTML;
+
+	var aLi = oUl.getElementsByTagName('li');
+	oUl.style.width = aLi[0].offsetWidth * aLi.length + 'px';
+
+	var aBtn = document.getElementsByTagName('input');
+	var speed = 0;
+	var timer = null;
+	var iNow = 0;
+	aBtn[0].onclick = function(){
+		if(timer){
+			return;
+		}
+		if(iNow == 0){
+			oUl.style.left = -oUl.offsetWidth/2 + 'px';
+			iNow = aLi.length/2;
+		}
+		var oldDes = -iNow * aLi[0].offsetWidth;
+		var newDes = (-iNow+1)* aLi[0].offsetWidth;
+		speed = 10;
+		timer = setInterval(function(){
+			oldDes += speed;
+			oUl.style.left = oldDes + 'px';
+			if(oldDes == newDes){
+				clearInterval(timer);
+				timer = null;
+			}
+		},100);
+		iNow--;
+		
+	}
+	aBtn[1].onclick = function(){
+		if (timer) {
+			return;
+		}
+		if(iNow == aLi.length/2){
+			oUl.style.left = '0px';
+			iNow = 0;
+		}
+		var oldDes = -iNow * aLi[0].offsetWidth;
+		var newDes = (-iNow-1)* aLi[0].offsetWidth;
+		speed = -10;
+		timer = setInterval(function(){
+			oldDes += speed;
+			oUl.style.left = oldDes + 'px';
+			if(oldDes == newDes){
+				clearInterval(timer);
+				timer = null;
+			}
+		},100);
+		iNow++;
+	}
+	function getStyle(obj,attr){
+		return obj.currentStyle?obj.currentStyle[attr]:getComputedStyle(obj)[attr];
+	}
+</script>
+</body>
+</html>
