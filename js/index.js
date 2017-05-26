@@ -2,6 +2,7 @@ window.onload = function(){
 	mv.app.clearTxtValue();
 	mv.app.select();
 	mv.app.runPic();
+	mv.app.changePic();
 }
 
 
@@ -35,6 +36,7 @@ mv.tools.addEvent = function(obj,event,callback){
 	}
 }
 
+
 mv.ui = {};
 mv.ui.clearValue = function(obj,value){
 	mv.tools.addEvent(obj,"focus",function(){
@@ -48,7 +50,37 @@ mv.ui.clearValue = function(obj,value){
 		}
 	});
 }
+mv.ui.fadeIn = function(obj){
+	if(obj.timer){
+		clearInterval(obj.timer);
+	}
+	var num = 0;
+	obj.timer = setInterval(function(){
+		num += 10;
+		obj.style.opacity = num/100;
+		obj.style.filter = 'alpha(opacity:'+num+')';
+		if (num >= 100) {
+			clearInterval(obj.timer);
+			obj.timer = null;
+		}
+	},50);
+}
 
+mv.ui.fadeOut = function(obj){
+	if(obj.timer){
+		clearInterval(obj.timer);
+	}
+	var num = 100;
+	obj.timer = setInterval(function(){
+		num -= 10;
+		obj.style.opacity = num/100; 
+		obj.style.filter = 'alpha(opacity:'+num+')';
+		if (num <= 0) {
+			clearInterval(obj.timer);
+			obj.timer = null;
+		}
+	},50);
+}
 
 mv.app = {};
 // 清空 文本框默认值
@@ -60,15 +92,19 @@ mv.app.clearTxtValue = function(){
 }
 //banner图片淡入淡出
 mv.app.changePic = function(){
-	// var ad = mv.tools.getId("ad");
-	// var aLi = aDd.getElementsByTagName("li");
-	// var num = 0;
-	// timer = setInterval(function(){
-	// 	for (var i = 0; i < aLi.length; i++) {
-	// 		aLi[i]
-	// 	}
-		
-	// },1000);
+	var ad = mv.tools.getId("ad");
+	var aLi = ad.getElementsByTagName("li");
+	var num = 0;
+	ad.timer = setInterval(function(){
+		for (var i = 0; i < aLi.length; i++) {
+			mv.ui.fadeOut(aLi[i]);
+		}
+		mv.ui.fadeIn(aLi[num]);
+		num++;
+		if(num >= aLi.length){
+			num = 0;
+		}
+	},3000);
 }
 // 排序 下拉菜单
 mv.app.select = function(){
